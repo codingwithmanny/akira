@@ -1,7 +1,24 @@
 {
   "name": "akira",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "lerna run build",
+    "dev": "lerna run start --stream --parallel",
+    "format": "yarn prettier --write",
+    "prettier": "prettier --ignore-path .gitignore \"**/*.+(ts|tsx|json)\"",
+    "test": "lerna run test --"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn format && yarn test"
+    }
+  },
   "devDependencies": {
-    "lerna": "^3.22.1"
+    "husky": "^4.2.5",
+    "lerna": "^3.22.1",
+    "prettier": "^2.0.5"
   }
 }

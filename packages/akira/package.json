@@ -1,0 +1,28 @@
+{
+  "name": "akira",
+  "version": "1.0.0",
+  "private": true,
+  "license": "MIT",
+  "author": "pandaniell",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc -b",
+    "gen-env-types": "npx gen-env-types .env -o types/global.d.ts -e .",
+    "start": "ts-node-dev --respawn --transpileOnly --poll src/index.ts",
+    "test": "tsc --noEmit"
+  },
+  "dependencies": {
+    "discord.js": "^12.2.0",
+    "dotenv": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/ws": "^7.2.5",
+    "ts-node-dev": "^1.0.0-pre.49",
+    "tslib": "^2.0.0",
+    "typescript": "^4.0.0-beta"
+  },
+  "engines": {
+    "node": "14.1.0",
+    "npm": "6.14.5"
+  }
+}

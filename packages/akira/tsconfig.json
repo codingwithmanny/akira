@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "include": ["src", "types"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "rootDir": "src",
+    "outDir": "dist",
+    "lib": ["es2020"],
+    "module": "commonjs",
+    "target": "es2020",
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "sourceMap": true
+  }
+}
