@@ -1,13 +1,22 @@
 import { Client, Intents } from "discord.js";
 import "dotenv/config";
-import { logger } from "./util/logger";
+import { registerEvents } from "./util/registerEvents";
 
-const intents = new Intents(Intents.ALL).remove([
-  "DIRECT_MESSAGE_TYPING",
-  "GUILD_MESSAGE_TYPING",
-]);
-const client = new Client({ disableMentions: "everyone", ws: { intents } });
+const main = async () => {
+  const intents = new Intents(Intents.ALL).remove([
+    "DIRECT_MESSAGE_TYPING",
+    "GUILD_MESSAGE_TYPING",
+  ]);
+  const client = new Client({ disableMentions: "everyone", ws: { intents } });
+  const events = await registerEvents(`${__dirname}/events/*{.js,.ts}`);
 
-client.once("ready", () => logger.info(`${client.user?.username} is ready`));
+  events.forEach(({ eventName, emitOnce, run }) =>
+    client[emitOnce ? "once" : "on"](eventName!, (...args) =>
+      run(...args, client)
+    )
+  );
 
-client.login(process.env.TOKEN);
+  client.login(process.env.TOKEN);
+};
+
+main();

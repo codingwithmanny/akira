@@ -14,9 +14,11 @@
   "dependencies": {
     "discord.js": "^12.2.0",
     "dotenv": "^8.2.0",
+    "glob": "^7.1.6",
     "winston": "^3.3.3"
   },
   "devDependencies": {
+    "@types/glob": "^7.1.2",
     "@types/ws": "^7.2.5",
     "ts-node-dev": "^1.0.0-pre.49",
     "tslib": "^2.0.0",
