@@ -1,7 +1,6 @@
 import {
   Client,
   ClientEvents,
-  Guild,
   Message,
   PermissionResolvable,
 } from "discord.js";
@@ -10,18 +9,13 @@ import { parse, sep } from "path";
 import { promisify } from "util";
 import { logger } from "./logger";
 
-type GuildMessage = Omit<Message, "guild"> & { guild: Guild };
-
 type MaybePromise<T> = T | Promise<T>;
 
 type CommandWithArgsProps<T> = {
   argsRequired: true;
   usage: string;
   examples?: string[];
-  validateArgs(
-    message: GuildMessage,
-    args: string[]
-  ): MaybePromise<T | undefined>;
+  validateArgs(message: Message, args: string[]): MaybePromise<T | undefined>;
 };
 
 export type Command<T = void> = {
@@ -33,7 +27,7 @@ export type Command<T = void> = {
   aliases?: string[];
   clientPermissions?: PermissionResolvable[];
   userPermissions?: PermissionResolvable[];
-  execute(message: GuildMessage, args: T): MaybePromise<unknown>;
+  execute(message: Message, args: T): MaybePromise<unknown>;
 } & (T extends void ? {} : CommandWithArgsProps<T>);
 
 export interface Event<T extends keyof ClientEvents> {
