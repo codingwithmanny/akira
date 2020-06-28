@@ -7,7 +7,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc -b",
-    "gen-env-types": "npx gen-env-types .env -o types/global.d.ts -e .",
+    "gen-env-types": "npx gen-env-types .env -o types/env.d.ts -e .",
     "start": "ts-node-dev --respawn --transpileOnly --poll src/index.ts",
     "test": "tsc --noEmit"
   },
