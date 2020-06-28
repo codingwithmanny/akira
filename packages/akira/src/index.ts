@@ -1,6 +1,9 @@
 import { Client, Intents } from "discord.js";
 import "dotenv/config";
-import { registerEvents } from "./util/registerEvents";
+import {
+  events,
+  registerCommandsAndEvents,
+} from "./util/registerCommandsAndEvents";
 
 const main = async () => {
   const intents = new Intents(Intents.ALL).remove([
@@ -8,7 +11,11 @@ const main = async () => {
     "GUILD_MESSAGE_TYPING",
   ]);
   const client = new Client({ disableMentions: "everyone", ws: { intents } });
-  const events = await registerEvents(`${__dirname}/events/*{.js,.ts}`);
+
+  await registerCommandsAndEvents({
+    commandDir: `${__dirname}/commands/*{.js,.ts}`,
+    eventDir: `${__dirname}/events/*{.js,.ts}`,
+  });
 
   events.forEach(({ eventName, emitOnce, run }) =>
     client[emitOnce ? "once" : "on"](eventName!, (...args) =>

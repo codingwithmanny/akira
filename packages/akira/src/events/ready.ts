@@ -1,5 +1,5 @@
 import { logger } from "../util/logger";
-import { Event } from "../util/registerEvents";
+import { Event } from "../util/registerCommandsAndEvents";
 
 export const event: Event<"ready"> = {
   emitOnce: true,
