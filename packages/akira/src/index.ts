@@ -2,6 +2,7 @@ import { Client, Intents } from "discord.js";
 import "dotenv/config";
 import "reflect-metadata";
 import { createConnection, getConnectionOptions } from "typeorm";
+import "./structures/Guild";
 import {
   events,
   registerCommandsAndEvents,

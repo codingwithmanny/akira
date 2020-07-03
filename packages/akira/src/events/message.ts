@@ -6,14 +6,8 @@ import { commands, Event } from "../util/registerCommandsAndEvents";
 export const event: Event<"message"> = {
   run: async (message) => {
     const { author, guild, channel, content, client } = message;
-    const prefix = process.env.PREFIX;
 
-    if (
-      author.bot ||
-      !guild?.available ||
-      !(channel instanceof TextChannel) ||
-      !content.startsWith(prefix)
-    ) {
+    if (author.bot || !guild?.available || !(channel instanceof TextChannel)) {
       return;
     }
 
@@ -23,6 +17,7 @@ export const event: Event<"message"> = {
       return;
     }
 
+    const { prefix } = await guild.get(["prefix"]);
     const [commandName, ...args] = content.slice(prefix.length).split(/ +/);
     const command = commands.get(commandName.toLowerCase());
 
