@@ -12,7 +12,7 @@ import { logger } from "./logger";
 type MaybePromise<T> = T | Promise<T>;
 
 type CommandWithArgsProps<T> = {
-  argsRequired: true;
+  argsRequired: boolean;
   usage: string;
   examples?: string[];
   validateArgs(message: Message, args: string[]): MaybePromise<T | undefined>;
