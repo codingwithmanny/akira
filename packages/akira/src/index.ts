@@ -22,7 +22,11 @@ const main = async () => {
     "DIRECT_MESSAGE_TYPING",
     "GUILD_MESSAGE_TYPING",
   ]);
-  const client = new Client({ disableMentions: "everyone", ws: { intents } });
+  const client = new Client({
+    disableMentions: "all",
+    ws: { intents },
+    restRequestTimeout: 60000,
+  });
 
   events.forEach(({ eventName, emitOnce, run }) =>
     client[emitOnce ? "once" : "on"](eventName!, (...args) =>
