@@ -18,6 +18,11 @@ export const event: Event<"message"> = {
     }
 
     const { prefix } = await guild.get(["prefix"]);
+
+    if (!content.startsWith(prefix)) {
+      return;
+    }
+
     const [commandName, ...args] = content.slice(prefix.length).split(/ +/);
     const command = commands.get(commandName.toLowerCase());
 
