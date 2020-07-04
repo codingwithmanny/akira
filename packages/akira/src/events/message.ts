@@ -42,12 +42,12 @@ export const event: Event<"message"> = {
       }
     }
 
-    if (command.argsRequired) {
+    if (command.acceptsArgs) {
       const validatedArgs = isPromise(command.validateArgs)
         ? await command.validateArgs(message, args)
         : command.validateArgs(message, args);
 
-      if (!validatedArgs) {
+      if (!validatedArgs && command.requiresArgs) {
         return logger.warn(
           `Invalid arguments provided for command ${command.name}`
         );

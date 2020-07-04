@@ -1,13 +1,14 @@
 import { Command } from "../../util/registerCommandsAndEvents";
 
-export const command: Command<[string?]> = {
+export const command: Command<string | undefined> = {
   description: "Get or change the current prefix",
   usage: "<new prefix?>",
   examples: ["-", "/", "$"],
-  argsRequired: false,
+  acceptsArgs: true,
+  requiresArgs: false,
   userPermissions: ["MANAGE_GUILD"],
-  validateArgs: (_, args) => [args[0]],
-  async execute(message, [newPrefix]) {
+  validateArgs: (_, args) => args[0],
+  async execute(message, newPrefix) {
     const { prefix } = await message.guild!.get(["prefix"]);
 
     if (!newPrefix) {
@@ -16,7 +17,7 @@ export const command: Command<[string?]> = {
 
     if (newPrefix === prefix) {
       return message.channel.send(
-        "You attempted to set the prefix to what it already was"
+        "You attempted to set the prefix to what it was already"
       );
     }
 

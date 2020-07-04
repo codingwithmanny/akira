@@ -12,7 +12,8 @@ import { logger } from "./logger";
 type MaybePromise<T> = T | Promise<T>;
 
 type CommandWithArgsProps<T> = {
-  argsRequired: boolean;
+  acceptsArgs: true;
+  requiresArgs: boolean;
   usage: string;
   examples?: string[];
   validateArgs(message: Message, args: string[]): MaybePromise<T | undefined>;
