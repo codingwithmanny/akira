@@ -3,13 +3,8 @@ import { Question } from "../../entity/Question";
 import { Command } from "../../util/registerCommandsAndEvents";
 import { numericEmojis } from "../../util/utilities";
 
-type Reply = typeof replies[number];
-
-const replies = ["y", "n", undefined] as const;
-
-const filter = (message: Message) => {
-  return replies.includes(message.content.toLowerCase() as Reply);
-};
+export const anonymousPollPhrase =
+  "*This poll is anonymous, your answer will be hidden\nbut may be changed at any time*";
 
 export const command: Command<string[]> = {
   description: "Start a public or anonymous poll",
@@ -17,8 +12,13 @@ export const command: Command<string[]> = {
   examples: ["What is the best looking color? | Red | Green | Blue"],
   acceptsArgs: true,
   requiresArgs: true,
-  clientPermissions: ["EMBED_LINKS", "READ_MESSAGE_HISTORY", "ADD_REACTIONS"],
-  userPermissions: ["MANAGE_GUILD"],
+  clientPermissions: [
+    "MANAGE_MESSAGES",
+    "EMBED_LINKS",
+    "READ_MESSAGE_HISTORY",
+    "ADD_REACTIONS",
+  ],
+  userPermissions: ["EMBED_LINKS", "ADD_REACTIONS"],
   validateArgs: (_, args) => args.join(" ").split(" | "),
   async execute(message, [question, ...answers]) {
     if (answers.length < 2 || answers.length > 10) {
@@ -31,9 +31,13 @@ export const command: Command<string[]> = {
       "Do you want this poll to be anonymous? (Y/N)"
     );
 
-    const reply = (await message.channel
+    const filter = (message: Message) => {
+      return ["y", "n"].includes(message.content.toLowerCase());
+    };
+
+    const reply = await message.channel
       .awaitMessages(filter, { max: 1, time: 60000 })
-      .then((response) => response.first()?.content)) as Reply;
+      .then((response) => response.first());
 
     await prompt.delete();
 
@@ -51,10 +55,10 @@ export const command: Command<string[]> = {
       },
       title: question,
       description: answers
-        .map((answer, idx) => `${[numericEmojis][idx]}: ${answer}`)
+        .map((answer, idx) => `${numericEmojis[idx]}: **${answer}**`)
         .join("\n"),
       footer: {
-        text: "The creator of this poll can end this poll by clicking ✅",
+        text: "The creator of this poll can end this poll by reacting with ✅",
       },
     };
 
@@ -66,15 +70,11 @@ export const command: Command<string[]> = {
 
     await pollMessage.react("✅");
 
-    if (message.deletable) {
-      await message.delete();
-    }
+    await message.delete();
 
-    if (reply === "n") {
-      return;
-    }
+    await reply.delete();
 
-    embed.description = `${embed.description}\n\n*This poll is anonymous, your answer will be hidden but may be changed at any time*`;
+    embed.description = `${embed.description}\n\n${anonymousPollPhrase}`;
 
     await pollMessage.edit({ embed });
 
@@ -83,6 +83,7 @@ export const command: Command<string[]> = {
       authorId: message.author.id,
       question,
       possibleAnswers: answers,
+      isAnonymous: reply.content.toLowerCase() === "y",
     });
   },
 };
