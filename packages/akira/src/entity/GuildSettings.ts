@@ -16,14 +16,14 @@ export interface IGuildSettings {
 @Entity()
 export class GuildSettings extends BaseEntity implements IGuildSettings {
   @PrimaryColumn()
-  guildId!: string;
+  guildId: string;
 
   @Column({ default: process.env.PREFIX })
-  prefix!: string;
+  prefix: string;
 
   @Column({ default: process.env.CLIENT_ID })
-  updatedBy!: string;
+  updatedBy: string;
 
   @UpdateDateColumn()
-  updatedAt!: Date;
+  updatedAt: Date;
 }
