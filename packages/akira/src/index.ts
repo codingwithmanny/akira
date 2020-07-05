@@ -2,6 +2,7 @@ import { Client, Intents } from "discord.js";
 import "dotenv/config";
 import "reflect-metadata";
 import { createConnection, getConnectionOptions } from "typeorm";
+import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import "./structures/Guild";
 import {
   events,
@@ -12,6 +13,7 @@ const main = async () => {
   await createConnection({
     ...(await getConnectionOptions(process.env.NODE_ENV)),
     name: "default",
+    namingStrategy: new SnakeNamingStrategy(),
   });
 
   await registerCommandsAndEvents({
@@ -26,6 +28,7 @@ const main = async () => {
   const client = new Client({
     disableMentions: "all",
     ws: { intents },
+    partials: ["MESSAGE", "CHANNEL", "REACTION"],
     restRequestTimeout: 60000,
   });
 
