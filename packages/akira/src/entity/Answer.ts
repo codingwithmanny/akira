@@ -4,22 +4,28 @@ import {
   Entity,
   ManyToOne,
   PrimaryGeneratedColumn,
+  Unique,
 } from "typeorm";
 import { Question } from "./Question";
 
 @Entity()
+@Unique("uc_ids", ["userId", "questionMessageId"])
 export class Answer extends BaseEntity {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id: number;
 
   @Column()
-  userId!: string;
+  userId: string;
 
   @Column()
-  answerIndex!: number;
+  answerIndex: number;
 
   @ManyToOne(() => Question, (question) => question.answers, {
     onDelete: "CASCADE",
   })
-  question!: Question;
+  question: Question;
+
+  @Column({ readonly: true })
+  // @ts-expect-error
+  private readonly questionMessageId: string;
 }
