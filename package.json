@@ -9,11 +9,17 @@
     "dev": "lerna run start --stream --parallel",
     "format": "yarn prettier --write",
     "prettier": "prettier --ignore-path .gitignore \"**/*.+(ts|tsx|json)\"",
-    "test": "lerna run test --"
+    "test": "lerna run test",
+    "test:staged": "git stash -k --include-untracked; yarn test; git stash apply;"
+  },
+  "lint-staged": {
+    "packages/**/*.{ts,js,json,md}": [
+      "prettier --write"
+    ]
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn format && yarn test"
+      "pre-commit": "yarn format && yarn test:staged"
     }
   },
   "devDependencies": {
