@@ -22,6 +22,7 @@
     "dotenv": "^8.2.0",
     "glob": "^7.1.6",
     "is-promise": "^4.0.0",
+    "lodash.snakecase": "^4.1.1",
     "pg": "^8.2.1",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.2.25",
@@ -30,6 +31,7 @@
   },
   "devDependencies": {
     "@types/glob": "^7.1.2",
+    "@types/lodash.snakecase": "^4.1.6",
     "@types/ws": "^7.2.5",
     "ts-node-dev": "^1.0.0-pre.49",
     "tslib": "^2.0.0",

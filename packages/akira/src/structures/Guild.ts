@@ -1,4 +1,5 @@
 import { Client, Structures } from "discord.js";
+import snakeCase from "lodash.snakecase";
 import { getRepository } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import { GuildSettings, IGuildSettings } from "../entity/GuildSettings";
@@ -27,23 +28,18 @@ export = Structures.extend("Guild", (Guild) => {
     async set(values: MaybeArray<QueryDeepPartialEntity<GuildSettings>>) {
       const keys = Object.keys(Array.isArray(values) ? values[0] : values);
 
-      if (!keys.length) {
-        throw new Error("Cannot upsert without any values specified");
-      }
-
       values = Array.isArray(values)
         ? values.map((value) => ({ ...value, guildId: this.id }))
         : { ...values, guildId: this.id };
 
-      const updateStr = keys
-        .map((key) => `"${key}" = EXCLUDED."${key}"`)
-        .join(", ");
-
       return getRepository(GuildSettings)
         .createQueryBuilder()
         .insert()
+        .orUpdate({
+          conflict_target: ["guild_id"],
+          overwrite: keys.map(snakeCase),
+        })
         .values(values)
-        .onConflict(`("guildId") DO UPDATE SET ${updateStr}`)
         .execute();
     }
   };
